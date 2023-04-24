@@ -10,7 +10,6 @@
 		83A9EEA129F611C400C99984 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA029F611C400C99984 /* AppDelegate.swift */; };
 		83A9EEA329F611C400C99984 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA229F611C400C99984 /* SceneDelegate.swift */; };
 		83A9EEA529F611C400C99984 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA429F611C400C99984 /* ViewController.swift */; };
-		83A9EEA829F611C400C99984 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83A9EEA629F611C400C99984 /* Main.storyboard */; };
 		83A9EEAA29F611C600C99984 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83A9EEA929F611C600C99984 /* Assets.xcassets */; };
 		83A9EEAD29F611C600C99984 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83A9EEAB29F611C600C99984 /* LaunchScreen.storyboard */; };
 		83A9EEB829F611C600C99984 /* RedditBrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEB729F611C600C99984 /* RedditBrowserTests.swift */; };
@@ -40,7 +39,6 @@
 		83A9EEA029F611C400C99984 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83A9EEA229F611C400C99984 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		83A9EEA429F611C400C99984 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		83A9EEA729F611C400C99984 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		83A9EEA929F611C600C99984 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83A9EEAC29F611C600C99984 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83A9EEAE29F611C600C99984 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 				83A9EEA029F611C400C99984 /* AppDelegate.swift */,
 				83A9EEA229F611C400C99984 /* SceneDelegate.swift */,
 				83A9EEA429F611C400C99984 /* ViewController.swift */,
-				83A9EEA629F611C400C99984 /* Main.storyboard */,
 				83A9EEA929F611C600C99984 /* Assets.xcassets */,
 				83A9EEAB29F611C600C99984 /* LaunchScreen.storyboard */,
 				83A9EEAE29F611C600C99984 /* Info.plist */,
@@ -233,7 +230,6 @@
 			files = (
 				83A9EEAD29F611C600C99984 /* LaunchScreen.storyboard in Resources */,
 				83A9EEAA29F611C600C99984 /* Assets.xcassets in Resources */,
-				83A9EEA829F611C400C99984 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +293,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		83A9EEA629F611C400C99984 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				83A9EEA729F611C400C99984 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		83A9EEAB29F611C600C99984 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -444,7 +432,6 @@
 				INFOPLIST_FILE = RedditBrowser/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -472,7 +459,6 @@
 				INFOPLIST_FILE = RedditBrowser/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
