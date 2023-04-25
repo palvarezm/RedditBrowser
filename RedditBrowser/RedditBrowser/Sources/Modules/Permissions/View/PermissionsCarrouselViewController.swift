@@ -60,14 +60,14 @@ class PermissionsCarrouselViewController: UIViewController {
     // MARK: - Properties
     private lazy var permissionImageView: UIImageView = {
         let view = UIImageView()
-        view.image = viewModel.type.permissionImage
+        view.image = viewModel.type?.permissionImage
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     private lazy var titleLabel: UILabel = {
         let view = UILabel()
-        view.text = viewModel.type.titleLabel
+        view.text = viewModel.type?.titleLabel
         view.font = UIFont.boldSystemFont(ofSize: Constants.titleLabelFontSize)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -75,7 +75,7 @@ class PermissionsCarrouselViewController: UIViewController {
 
     private lazy var descriptionLabel: UILabel = {
         let view = UILabel()
-        view.text = viewModel.type.descriptionLabel
+        view.text = viewModel.type?.descriptionLabel
         view.numberOfLines = 0
         view.textAlignment = .center
         view.font = view.font.withSize(Constants.descriptionLabelFontSize)
@@ -86,7 +86,7 @@ class PermissionsCarrouselViewController: UIViewController {
     private lazy var allowButton: UIButton = {
         let view = UIButton()
         view.configuration = .bordered()
-        view.configuration?.title = viewModel.type.allowButtonLabel
+        view.configuration?.title = viewModel.type?.allowButtonLabel
         view.configuration?.baseForegroundColor = .white
         view.clipsToBounds = true
         view.layer.cornerRadius = Constants.buttonCornerRadius
@@ -170,12 +170,21 @@ class PermissionsCarrouselViewController: UIViewController {
             cancelButtonTappedPublisher: cancelButtonTappedSubject.eraseToAnyPublisher())
         let output = viewModel.transform(input: input)
 
-        [output.setViewTypePublisher, output.changeViewTypePublisher].forEach {
-            $0.sink { [weak self] viewType in
+        output.setViewTypePublisher
+            .sink { [weak self] viewType in
                 self?.configureViewType(viewType: viewType)
             }
             .store(in: &cancellables)
-        }
+
+        output.changeViewTypePublisher
+            .sink { [weak self] viewType in
+                if let viewType = viewType {
+                    self?.configureViewType(viewType: viewType)
+                } else {
+                    self?.goToHomeViewController()
+                }
+            }
+            .store(in: &cancellables)
 
         [output.allowButtonTappedPublisher, output.cancelButtonTappedPublisher].forEach {
             $0.sink { _ in }
@@ -290,5 +299,11 @@ class PermissionsCarrouselViewController: UIViewController {
     @objc
     private func didTapCancelButton() {
         cancelButtonTappedSubject.send()
+    }
+
+    private func goToHomeViewController() {
+        let homeVC = HomeViewController()
+        homeVC.modalPresentationStyle = .fullScreen
+        present(homeVC, animated: false)
     }
 }
