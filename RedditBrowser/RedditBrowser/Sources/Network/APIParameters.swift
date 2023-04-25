@@ -7,16 +7,28 @@
 
 struct APIParameters {
     struct GetNewParams: Encodable {
-        var format: String = "json"
-        var page: String?
         var postsLimit: Int = APIConstants.postLimit
         var linkFlairText: String = APIConstants.memeCategory
+        var page: String?
 
         private enum CodingKeys: String, CodingKey {
-            case format
             case postsLimit = "limit"
-            case page = "after"
             case linkFlairText = "link_flair_text"
+            case page = "after"
+        }
+    }
+
+    struct GetSearchedPostsParams: Encodable {
+        var searchedText: String?
+        var postsLimit: Int = APIConstants.postLimit
+        var linkFlairText: String = APIConstants.memeCategory
+        var page: String?
+
+        private enum CodingKeys: String, CodingKey {
+            case searchedText = "q"
+            case postsLimit = "limit"
+            case linkFlairText = "link_flair_text"
+            case page = "after"
         }
     }
 }

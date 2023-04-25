@@ -1,5 +1,5 @@
 //
-//  GetNewResponse.swift
+//  GetPostsResponse.swift
 //  RedditBrowser
 //
 //  Created by Paul Alvarez on 25/04/23.
@@ -9,7 +9,7 @@ enum PostHint: String {
     case image = "image"
 }
 
-struct GetNewResponse: Codable {
+struct GetPostsResponse: Codable {
     var data: Data
 
     struct Data: Codable {
@@ -24,6 +24,10 @@ struct GetNewResponse: Codable {
         struct Post: Codable {
             var postData: Data
 
+            enum CodingKeys: String, CodingKey {
+                case postData = "data"
+            }
+
             struct Data: Codable {
                 var title: String
                 var imageURL: String
@@ -37,10 +41,6 @@ struct GetNewResponse: Codable {
                     case commentsQuantity = "num_comments"
                     case postHint = "post_hint"
                 }
-            }
-
-            enum CodingKeys: String, CodingKey {
-                case postData = "data"
             }
         }
     }

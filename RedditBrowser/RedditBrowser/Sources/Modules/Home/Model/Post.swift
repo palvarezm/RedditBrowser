@@ -13,7 +13,7 @@ struct Post {
     let score: String
     let commentsQuantity: String
 
-    init(from response: GetNewResponse.Data.Post.Data) {
+    init(from response: GetPostsResponse.Data.Post.Data) {
         self.imageURL = response.imageURL
         self.title = response.title
         self.score = "\(response.score)"

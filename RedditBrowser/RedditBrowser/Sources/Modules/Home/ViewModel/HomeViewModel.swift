@@ -20,6 +20,7 @@ class HomeViewModel {
     }
 
     private var apiClient: APIClient
+    private var lastSearched: String = ""
     @Published private var posts: [Post] = []
     @Published private var searchText: String?
     private var cancellables: Set<AnyCancellable> = []
@@ -44,12 +45,11 @@ class HomeViewModel {
         let setDataSourcePublisher: AnyPublisher<[Post], Never> = Publishers.CombineLatest(
             $posts.compactMap { $0 },
             $searchText)
-                .flatMap { (posts: [Post], searchText: String?) -> AnyPublisher<[Post], Never> in
-                if let searchText = searchText, !searchText.isEmpty {
-                    #warning("Implement search")
-                    debugPrint("filter \(searchText)")
-                    // TODO: Set posts to response data
-                }
+                .flatMap { [weak self] (posts: [Post], searchText: String?) -> AnyPublisher<[Post], Never> in
+                    if let searchText = searchText, !searchText.isEmpty, searchText != self?.lastSearched {
+                        self?.lastSearched = searchText
+                        self?.fetchSearchedPosts(searchText: searchText)
+                    }
                 return Just(posts).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
 
@@ -59,7 +59,20 @@ class HomeViewModel {
     }
 
     private func fetchPosts() {
-        apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams()))
+        apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams(),
+                                            path: RedditRequest.new.path))
+            .sink { _ in }
+            receiveValue: { [weak self] response in
+                self?.posts = response.data.posts
+                    .filter { $0.postData.postHint == PostHint.image.rawValue }
+                    .map { Post(from: $0.postData) }
+            }.store(in: &cancellables)
+    }
+
+    private func fetchSearchedPosts(searchText: String) {
+        apiClient.dispatch(APIRouter.GetSearchedPosts(
+            queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText),
+            path: RedditRequest.search.path))
             .sink { _ in }
             receiveValue: { [weak self] response in
                 self?.posts = response.data.posts

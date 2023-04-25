@@ -13,12 +13,14 @@ enum HTTPMethod: String {
 
 protocol Request {
     var method: HTTPMethod { get }
+    var path: String { get }
     var queryParams: [String: Any]? { get }
     associatedtype ReturnType: Codable
 }
 
 extension Request {
     var method: HTTPMethod { return .get }
+    var path: String { return "" }
     var queryParams: [String: Any]? { return nil }
 
     func addQueryParams(queryParams: [String: Any]?) -> [URLQueryItem]? {
@@ -30,7 +32,7 @@ extension Request {
     func asURLRequest(baseURL: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: baseURL) else { return nil }
 
-        urlComponents.path = urlComponents.path.appending(RedditRequest.new.path)
+        urlComponents.path = urlComponents.path.appending(path)
         urlComponents.queryItems = addQueryParams(queryParams: queryParams)
 
         guard let finalURL = urlComponents.url else { return nil }
