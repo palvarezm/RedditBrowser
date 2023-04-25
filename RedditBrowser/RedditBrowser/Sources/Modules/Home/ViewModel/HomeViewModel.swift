@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 class HomeViewModel {
     struct Input {
@@ -45,13 +46,13 @@ class HomeViewModel {
         let setDataSourcePublisher: AnyPublisher<[Post], Never> = Publishers.CombineLatest(
             $posts.compactMap { $0 },
             $searchText)
-                .flatMap { [weak self] (posts: [Post], searchText: String?) -> AnyPublisher<[Post], Never> in
+                .flatMapLatest { [weak self] (posts: [Post], searchText: String?) -> AnyPublisher<[Post], Never> in
                     if let searchText = searchText, !searchText.isEmpty, searchText != self?.lastSearched {
                         self?.lastSearched = searchText
                         self?.fetchSearchedPosts(searchText: searchText)
                     }
                 return Just(posts).eraseToAnyPublisher()
-            }.eraseToAnyPublisher()
+                }.eraseToAnyPublisher()
 
         return .init(viewDidLoadPublisher: viewDidLoadPublisher,
                      searchTextPublisher: searchTextPublisher,

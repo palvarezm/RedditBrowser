@@ -1,5 +1,5 @@
 //
-//  Encodable + Extension.swift
+//  Encodable+Extension.swift
 //  RedditBrowser
 //
 //  Created by Paul Alvarez on 25/04/23.
