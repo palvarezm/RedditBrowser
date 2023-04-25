@@ -24,9 +24,9 @@ enum PermissionViewType: Int {
 
     var permissionImage: UIImage? {
         switch self {
-        case .requestCamera: return UIImage(systemName: "camera")
-        case .requestNotifications: return UIImage(systemName: "bell")
-        case .requestLocations: return UIImage(systemName: "map")
+        case .requestCamera: return UIImage(named: "camera_permission")
+        case .requestNotifications: return UIImage(named: "notification_permission")
+        case .requestLocations: return UIImage(named: "location_permission")
         }
     }
 
@@ -113,21 +113,24 @@ class PermissionsCarrouselViewController: UIViewController {
     // MARK: - Constants
     private enum Constants {
         static let viewBackgroundColor = UIColor.white
-        static let titleLabelTopMargin = 24.0
+        // Margins
+        static let imageTopMargin = 100.0
+        static let titleLabelTopMargin = 48.0
         static let descriptionLabelTopMargin = 12.0
-        static let descriptionLabelHorizontalMargin = 48.0
-        static let allowButtonTopMargin = 24.0
-        static let buttonHorizontalMargin = 60.0
+        static let descriptionLabelHorizontalMargin = 64.0
+        static let allowButtonTopMargin = 50.0
+        static let buttonHorizontalMargin = 95.0
         static let cancelButtonTopMargin = 12.0
-        
+        // Button
         static let buttonCornerRadius = 24.0
         static let buttonHeight = 48.0
+        static let buttonGradientStartPoint = CGPoint(x: 0.0, y: 1.0)
+        static let buttonGradientEndPoint = CGPoint(x: 1.0, y: 0.0)
+        static let buttonTopGradientColor = UIColor.red
+        static let buttonBottomGradientColor = UIColor.orange
+        // Font
         static let titleLabelFontSize = 24.0
         static let descriptionLabelFontSize = 16.0
-        static let gradientStartPoint = CGPoint(x: 0.0, y: 1.0)
-        static let gradientEndPoint = CGPoint(x: 1.0, y: 0.0)
-        static let topGradientColor = UIColor.red
-        static let bottomGradientColor = UIColor.orange
     }
 
     // MARK: - Initializers
@@ -192,7 +195,8 @@ class PermissionsCarrouselViewController: UIViewController {
     private func setupPermissionImageView() {
         view.addSubview(permissionImageView)
         NSLayoutConstraint.activate([
-            permissionImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            permissionImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor,
+                                                     constant: Constants.imageTopMargin),
             permissionImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -238,9 +242,10 @@ class PermissionsCarrouselViewController: UIViewController {
             cancelButton.topAnchor.constraint(equalTo: allowButton.bottomAnchor,
                                               constant: Constants.cancelButtonTopMargin),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                              constant: Constants.buttonHorizontalMargin),
+                                                  constant: Constants.buttonHorizontalMargin),
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                 constant: -Constants.buttonHorizontalMargin),
+                                                   constant: -Constants.buttonHorizontalMargin),
+            cancelButton.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor),
             cancelButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight)
         ])
     }
@@ -249,9 +254,10 @@ class PermissionsCarrouselViewController: UIViewController {
     private func applyGradientToAllowButton() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = allowButton.bounds
-        gradientLayer.colors = [Constants.topGradientColor.cgColor, Constants.bottomGradientColor.cgColor]
-        gradientLayer.startPoint = Constants.gradientStartPoint
-        gradientLayer.endPoint = Constants.gradientEndPoint
+        gradientLayer.colors = [Constants.buttonTopGradientColor.cgColor,
+                                Constants.buttonBottomGradientColor.cgColor]
+        gradientLayer.startPoint = Constants.buttonGradientStartPoint
+        gradientLayer.endPoint = Constants.buttonGradientEndPoint
         gradientLayer.locations = [0.0, 1.0]
         allowButton.layer.insertSublayer(gradientLayer, at: 0)
     }
