@@ -131,6 +131,8 @@ class PermissionsCarrouselViewController: UIViewController {
         // Font
         static let titleLabelFontSize = 24.0
         static let descriptionLabelFontSize = 16.0
+        // Animation
+        static let fadeTime = 0.35
     }
 
     // MARK: - Initializers
@@ -264,6 +266,7 @@ class PermissionsCarrouselViewController: UIViewController {
 
     // MARK: - ConfigureViewType
     private func configureViewType(viewType: PermissionViewType) {
+        [permissionImageView, titleLabel, descriptionLabel, allowButton].forEach { $0.fadeTransition(for: Constants.fadeTime) }
         permissionImageView.image = viewType.permissionImage
         titleLabel.text = viewType.titleLabel
         descriptionLabel.text = viewType.descriptionLabel

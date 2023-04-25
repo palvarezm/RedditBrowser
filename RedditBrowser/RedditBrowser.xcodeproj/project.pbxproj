@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8395306329F7A2B800F604CF /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395306229F7A2B800F604CF /* UIView+Extension.swift */; };
 		83A9EEA129F611C400C99984 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA029F611C400C99984 /* AppDelegate.swift */; };
 		83A9EEA329F611C400C99984 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA229F611C400C99984 /* SceneDelegate.swift */; };
 		83A9EEA529F611C400C99984 /* PermissionsCarrouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA429F611C400C99984 /* PermissionsCarrouselViewController.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8395306229F7A2B800F604CF /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		83A9EE9D29F611C400C99984 /* RedditBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RedditBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A9EEA029F611C400C99984 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83A9EEA229F611C400C99984 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				83A9EED729F6E36800C99984 /* String+Extension.swift */,
+				8395306229F7A2B800F604CF /* UIView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 			files = (
 				83A9EED329F61E4400C99984 /* PermissionManager.swift in Sources */,
 				83A9EEA529F611C400C99984 /* PermissionsCarrouselViewController.swift in Sources */,
+				8395306329F7A2B800F604CF /* UIView+Extension.swift in Sources */,
 				83A9EEA129F611C400C99984 /* AppDelegate.swift in Sources */,
 				83A9EED829F6E36800C99984 /* String+Extension.swift in Sources */,
 				83A9EEE629F70FF700C99984 /* PermissionsCarrouselViewModel.swift in Sources */,
