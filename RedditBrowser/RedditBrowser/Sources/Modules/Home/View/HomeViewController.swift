@@ -39,6 +39,7 @@ class HomeViewController: UIViewController {
     @Published private var posts: [Post] = []
 
     private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
+    private let settingsButtonTappedSubject = PassthroughSubject<Void, Never>()
     private let searchTextSubject = PassthroughSubject<String?, Never>()
     private var cancellables = Set<AnyCancellable>()
 
@@ -86,8 +87,10 @@ class HomeViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        let input = HomeViewModel.Input(viewDidLoadPublisher: viewDidLoadSubject.eraseToAnyPublisher(),
-                                        searchTextPublisher: searchTextSubject.eraseToAnyPublisher())
+        let input = HomeViewModel.Input(
+            viewDidLoadPublisher: viewDidLoadSubject.eraseToAnyPublisher(),
+            settingsButtonTappedPublisher: settingsButtonTappedSubject.eraseToAnyPublisher(),
+            searchTextPublisher: searchTextSubject.eraseToAnyPublisher())
         let output = viewModel.transform(input: input)
 
         [output.viewDidLoadPublisher, output.searchTextPublisher].forEach { $0.sink { _ in }.store(in: &cancellables) }
@@ -98,11 +101,18 @@ class HomeViewController: UIViewController {
                 self?.posts = posts
             }
             .store(in: &cancellables)
+
+        output.showPermissionCarrouselPublisher
+            .sink { [weak self] _ in
+                self?.goToPermissionsCarrouselViewController()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Setup
     private func setup() {
         setupSettingsButton()
+        setupSettingsButtonAction()
         setupSearchController()
         setupPostsTableView()
     }
@@ -143,6 +153,21 @@ class HomeViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableView.register(PostCell.self, forCellReuseIdentifier: PostCell.identifier)
+    }
+
+    // MARK: - Actions
+    private func setupSettingsButtonAction() {
+        settingsButton.addTarget(self, action: #selector(settingsButtonTapped), for: .touchUpInside)
+    }
+
+    @objc
+    private func settingsButtonTapped() {
+        settingsButtonTappedSubject.send()
+    }
+
+    private func goToPermissionsCarrouselViewController() {
+        let permissionsCarrouselVC = PermissionsCarrouselViewController()
+        present(permissionsCarrouselVC, animated: false)
     }
 }
 

@@ -11,6 +11,7 @@ import Foundation
 class HomeViewModel {
     struct Input {
         let viewDidLoadPublisher: AnyPublisher<Void, Never>
+        let settingsButtonTappedPublisher: AnyPublisher<Void, Never>
         let searchTextPublisher: AnyPublisher<String?, Never>
     }
 
@@ -18,6 +19,7 @@ class HomeViewModel {
         let viewDidLoadPublisher: AnyPublisher<Void, Never>
         let searchTextPublisher: AnyPublisher<Void, Never>
         let setDataSourcePublisher: AnyPublisher<[Post], Never>
+        let showPermissionCarrouselPublisher: AnyPublisher<Void, Never>
     }
 
     private var apiClient: APIClient
@@ -54,9 +56,16 @@ class HomeViewModel {
                 return Just(posts).eraseToAnyPublisher()
                 }.eraseToAnyPublisher()
 
+        let settingsButtonTapped: AnyPublisher<Void, Never> = input.settingsButtonTappedPublisher.handleEvents(receiveOutput: { _ in
+            
+        }).flatMap {
+            return Just(()).eraseToAnyPublisher()
+        }.eraseToAnyPublisher()
+
         return .init(viewDidLoadPublisher: viewDidLoadPublisher,
                      searchTextPublisher: searchTextPublisher,
-                     setDataSourcePublisher: setDataSourcePublisher)
+                     setDataSourcePublisher: setDataSourcePublisher,
+                     showPermissionCarrouselPublisher: settingsButtonTapped)
     }
 
     private func fetchPosts() {
