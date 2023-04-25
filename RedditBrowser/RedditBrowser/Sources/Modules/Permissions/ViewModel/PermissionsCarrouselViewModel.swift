@@ -48,7 +48,11 @@ class PermissionsCarrouselViewModel {
 
         let cancelButtonTappedPublisher: AnyPublisher<Void, Never> =  input.cancelButtonTappedPublisher
             .handleEvents(receiveOutput: { [unowned self] _ in
-                loadViewTypeToNextPermission()
+                guard let type = PermissionViewType(rawValue: type.permissionType.rawValue + 1) else {
+                    goHomeViewController()
+                    return
+                }
+                self.type = type
             }).flatMap { _ in
                 return Just(()).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
