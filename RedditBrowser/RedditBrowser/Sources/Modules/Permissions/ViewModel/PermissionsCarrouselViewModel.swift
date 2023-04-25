@@ -41,7 +41,8 @@ class PermissionsCarrouselViewModel {
             .handleEvents(receiveOutput: { [unowned self] _ in
                 let type = type ?? .requestCamera
                 permissions.request(for: type.permissionType) { status in
-                    loadViewTypeToNextPermission()
+                    let type = self.type ?? .requestCamera
+                    self.type = PermissionViewType(rawValue: type.permissionType.rawValue + 1)
                 }
             }).flatMap { _ in
                 return Just(()).eraseToAnyPublisher()
@@ -51,15 +52,16 @@ class PermissionsCarrouselViewModel {
             .handleEvents(receiveOutput: { [unowned self] _ in
                 let type = self.type ?? .requestCamera
                 self.type = PermissionViewType(rawValue: type.permissionType.rawValue + 1)
-                if self.type == nil {
-                    setDidFinishPermissionFlow()
-                }
             }).flatMap { _ in
                 return Just(()).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
 
         let changeViewTypePublisher: AnyPublisher<PermissionViewType?, Never> = $type
-            .flatMap { viewType in
+            .handleEvents(receiveOutput: { [weak self] viewType in
+                if viewType == nil {
+                    self?.setDidFinishPermissionFlow()
+                }
+            }).flatMap { viewType in
                 return Just(viewType).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
 
