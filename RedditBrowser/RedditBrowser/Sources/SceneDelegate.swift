@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let didFinishPermissionFlow = UserDefaults.standard.bool(forKey: UserDefaultKeys.didFinishPermissionFlow.rawValue)
         let rootViewController = didFinishPermissionFlow
-                                ? UIViewController()
+                                ? HomeViewController()
                                 : PermissionsCarrouselViewController()
 
         let appWindow = UIWindow(frame: windowScene.coordinateSpace.bounds)
