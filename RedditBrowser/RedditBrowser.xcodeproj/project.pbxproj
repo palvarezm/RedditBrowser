@@ -9,12 +9,17 @@
 /* Begin PBXBuildFile section */
 		83A9EEA129F611C400C99984 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA029F611C400C99984 /* AppDelegate.swift */; };
 		83A9EEA329F611C400C99984 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA229F611C400C99984 /* SceneDelegate.swift */; };
-		83A9EEA529F611C400C99984 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA429F611C400C99984 /* ViewController.swift */; };
+		83A9EEA529F611C400C99984 /* PermissionsCarrouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEA429F611C400C99984 /* PermissionsCarrouselViewController.swift */; };
 		83A9EEAA29F611C600C99984 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83A9EEA929F611C600C99984 /* Assets.xcassets */; };
 		83A9EEAD29F611C600C99984 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83A9EEAB29F611C600C99984 /* LaunchScreen.storyboard */; };
 		83A9EEB829F611C600C99984 /* RedditBrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEB729F611C600C99984 /* RedditBrowserTests.swift */; };
 		83A9EEC229F611C600C99984 /* RedditBrowserUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEC129F611C600C99984 /* RedditBrowserUITests.swift */; };
 		83A9EEC429F611C600C99984 /* RedditBrowserUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEC329F611C600C99984 /* RedditBrowserUITestsLaunchTests.swift */; };
+		83A9EED329F61E4400C99984 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EED229F61E4400C99984 /* PermissionManager.swift */; };
+		83A9EED829F6E36800C99984 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EED729F6E36800C99984 /* String+Extension.swift */; };
+		83A9EEE029F6E41F00C99984 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83A9EEDF29F6E41F00C99984 /* Localizable.strings */; };
+		83A9EEE629F70FF700C99984 /* PermissionsCarrouselViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEE529F70FF700C99984 /* PermissionsCarrouselViewModel.swift */; };
+		83A9EEE829F7647C00C99984 /* UserDefaultKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9EEE729F7647C00C99984 /* UserDefaultKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +43,7 @@
 		83A9EE9D29F611C400C99984 /* RedditBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RedditBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A9EEA029F611C400C99984 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83A9EEA229F611C400C99984 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		83A9EEA429F611C400C99984 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		83A9EEA429F611C400C99984 /* PermissionsCarrouselViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCarrouselViewController.swift; sourceTree = "<group>"; };
 		83A9EEA929F611C600C99984 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83A9EEAC29F611C600C99984 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83A9EEAE29F611C600C99984 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +52,11 @@
 		83A9EEBD29F611C600C99984 /* RedditBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RedditBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A9EEC129F611C600C99984 /* RedditBrowserUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditBrowserUITests.swift; sourceTree = "<group>"; };
 		83A9EEC329F611C600C99984 /* RedditBrowserUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditBrowserUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		83A9EED229F61E4400C99984 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+		83A9EED729F6E36800C99984 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		83A9EEDF29F6E41F00C99984 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		83A9EEE529F70FF700C99984 /* PermissionsCarrouselViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCarrouselViewModel.swift; sourceTree = "<group>"; };
+		83A9EEE729F7647C00C99984 /* UserDefaultKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,9 +133,10 @@
 		83A9EED029F61BE600C99984 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				83A9EED529F6E35400C99984 /* Utility */,
+				83A9EED429F6E35000C99984 /* Modules */,
 				83A9EEA029F611C400C99984 /* AppDelegate.swift */,
 				83A9EEA229F611C400C99984 /* SceneDelegate.swift */,
-				83A9EEA429F611C400C99984 /* ViewController.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -133,11 +144,79 @@
 		83A9EED129F61BEA00C99984 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83A9EED929F6E3E500C99984 /* Localizables */,
 				83A9EEA929F611C600C99984 /* Assets.xcassets */,
 				83A9EEAB29F611C600C99984 /* LaunchScreen.storyboard */,
 				83A9EEAE29F611C600C99984 /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		83A9EED429F6E35000C99984 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EEE129F70D5300C99984 /* Permissions */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		83A9EED529F6E35400C99984 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EED629F6E36000C99984 /* Extension */,
+				83A9EEE729F7647C00C99984 /* UserDefaultKeys.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		83A9EED629F6E36000C99984 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EED729F6E36800C99984 /* String+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		83A9EED929F6E3E500C99984 /* Localizables */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EEDF29F6E41F00C99984 /* Localizable.strings */,
+			);
+			path = Localizables;
+			sourceTree = "<group>";
+		};
+		83A9EEE129F70D5300C99984 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EEE329F70FC600C99984 /* Model */,
+				83A9EEE429F70FCF00C99984 /* ViewModel */,
+				83A9EEE229F70D6100C99984 /* View */,
+				83A9EED229F61E4400C99984 /* PermissionManager.swift */,
+			);
+			path = Permissions;
+			sourceTree = "<group>";
+		};
+		83A9EEE229F70D6100C99984 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EEA429F611C400C99984 /* PermissionsCarrouselViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		83A9EEE329F70FC600C99984 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		83A9EEE429F70FCF00C99984 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				83A9EEE529F70FF700C99984 /* PermissionsCarrouselViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -245,6 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83A9EEAD29F611C600C99984 /* LaunchScreen.storyboard in Resources */,
+				83A9EEE029F6E41F00C99984 /* Localizable.strings in Resources */,
 				83A9EEAA29F611C600C99984 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,8 +350,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83A9EEA529F611C400C99984 /* ViewController.swift in Sources */,
+				83A9EED329F61E4400C99984 /* PermissionManager.swift in Sources */,
+				83A9EEA529F611C400C99984 /* PermissionsCarrouselViewController.swift in Sources */,
 				83A9EEA129F611C400C99984 /* AppDelegate.swift in Sources */,
+				83A9EED829F6E36800C99984 /* String+Extension.swift in Sources */,
+				83A9EEE629F70FF700C99984 /* PermissionsCarrouselViewModel.swift in Sources */,
+				83A9EEE829F7647C00C99984 /* UserDefaultKeys.swift in Sources */,
 				83A9EEA329F611C400C99984 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,7 +529,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7C9T7K4LUL;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RedditBrowser/Info.plist;
+				INFOPLIST_FILE = RedditBrowser/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -472,7 +556,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7C9T7K4LUL;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RedditBrowser/Info.plist;
+				INFOPLIST_FILE = RedditBrowser/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

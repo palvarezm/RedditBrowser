@@ -18,9 +18,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
+        let didFinishPermissionFlow = UserDefaults.standard.bool(forKey: UserDefaultKeys.didFinishPermissionFlow.rawValue)
+        let rootViewController = didFinishPermissionFlow
+                                ? UIViewController()
+                                : PermissionsCarrouselViewController()
+
         let appWindow = UIWindow(frame: windowScene.coordinateSpace.bounds)
         appWindow.windowScene = windowScene
-        appWindow.rootViewController = ViewController()
+        appWindow.rootViewController = rootViewController
         appWindow.makeKeyAndVisible()
 
         window = appWindow
