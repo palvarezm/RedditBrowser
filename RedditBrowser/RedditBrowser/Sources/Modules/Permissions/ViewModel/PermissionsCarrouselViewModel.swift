@@ -19,11 +19,11 @@ class PermissionsCarrouselViewModel {
         let setViewTypePublisher: AnyPublisher<PermissionViewType, Never>
         let allowButtonTappedPublisher: AnyPublisher<Void, Never>
         let cancelButtonTappedPublisher: AnyPublisher<Void, Never>
-        let changeViewTypePublisher: AnyPublisher<PermissionViewType, Never>
+        let changeViewTypePublisher: AnyPublisher<PermissionViewType?, Never>
     }
 
     private var permissions: PermissionManager
-    @Published var type: PermissionViewType = .requestCamera
+    @Published var type: PermissionViewType? = .requestCamera
 
     init(permissions: PermissionManager = PermissionManager()){
         self.permissions = permissions
@@ -34,13 +34,15 @@ class PermissionsCarrouselViewModel {
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.loadViewTypeToNextPermission()
             }).flatMap { [unowned self] _ in
-                return Just(type).eraseToAnyPublisher()
+                return Just(type ?? .requestCamera).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
 
         let allowButtonTappedPublisher: AnyPublisher<Void, Never> = input.allowButtonTappedPublisher
             .handleEvents(receiveOutput: { [unowned self] _ in
+                let type = type ?? .requestCamera
                 permissions.request(for: type.permissionType) { status in
-                    loadViewTypeToNextPermission()
+                    let type = self.type ?? .requestCamera
+                    self.type = PermissionViewType(rawValue: type.permissionType.rawValue + 1)
                 }
             }).flatMap { _ in
                 return Just(()).eraseToAnyPublisher()
@@ -48,17 +50,18 @@ class PermissionsCarrouselViewModel {
 
         let cancelButtonTappedPublisher: AnyPublisher<Void, Never> =  input.cancelButtonTappedPublisher
             .handleEvents(receiveOutput: { [unowned self] _ in
-                guard let type = PermissionViewType(rawValue: type.permissionType.rawValue + 1) else {
-                    goHomeViewController()
-                    return
-                }
-                self.type = type
+                let type = self.type ?? .requestCamera
+                self.type = PermissionViewType(rawValue: type.permissionType.rawValue + 1)
             }).flatMap { _ in
                 return Just(()).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
 
-        let changeViewTypePublisher: AnyPublisher<PermissionViewType, Never> = $type
-            .flatMap { viewType in
+        let changeViewTypePublisher: AnyPublisher<PermissionViewType?, Never> = $type
+            .handleEvents(receiveOutput: { [weak self] viewType in
+                if viewType == nil {
+                    self?.setDidFinishPermissionFlow()
+                }
+            }).flatMap { viewType in
                 return Just(viewType).eraseToAnyPublisher()
             }.eraseToAnyPublisher()
 
@@ -71,14 +74,13 @@ class PermissionsCarrouselViewModel {
     private func loadViewTypeToNextPermission() {
         guard let permissionRawValue = permissions.checkLastPermission()?.rawValue,
               let type = PermissionViewType(rawValue: permissionRawValue) else {
-            goHomeViewController()
+            setDidFinishPermissionFlow()
             return
         }
         self.type = type
     }
 
-    private func goHomeViewController() {
+    private func setDidFinishPermissionFlow() {
         UserDefaults.standard.set(true, forKey: UserDefaultKeys.didFinishPermissionFlow.rawValue)
-        #warning("Implement navigation to home")
     }
 }

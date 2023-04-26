@@ -17,3 +17,6 @@
 "request_notifications_permission_allow_button" = "Enable";
 "request_location_permission_allow_button" = "Enable";
 "request_permission_cancel_button" = "Cancel";
+
+// MARK: - Home
+"search_bar_text_placeholder" = "Search";
