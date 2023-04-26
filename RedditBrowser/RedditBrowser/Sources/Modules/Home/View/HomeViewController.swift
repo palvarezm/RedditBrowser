@@ -53,11 +53,12 @@ class HomeViewController: UIViewController {
     private enum Constants {
         static let viewBackgroundColor = UIColor.white
         // Margins
-        static let settingsButtonTopMargin = 28.0
+        static let settingsButtonTopMargin = 48.0
         static let settingsButtonLeadingMargin = 16.0
         static let searchControllerTopMargin = 12.0
         static let searchControllerHorizontalMargin = 16.0
         static let postsTableViewHorizontalMargin = 16.0
+        static let postCellHeight = 400.0
     }
 
     // MARK: - Initializers
@@ -218,14 +219,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        400.0
-    }
-
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        String(format: "%d results found", posts.count)
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
+        Constants.postCellHeight
     }
 }
