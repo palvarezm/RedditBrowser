@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  RedditBrowser
+
+  Created by Paul Alvarez on 24/04/23.
+  
+*/
+
+// MARK: - Permissions
+"request_camera_permission_title_label" = "Camera Access";
+"request_camera_permission_description_label" = "Please allow access to your camera to take photos";
+"request_notifications_permission_title_label" = "Enable push notifications";
+"request_notifications_permission_description_label" = "Enable push notifications to let send you personal news and updates.";
+"request_location_permission_title_label" = "Enable location services";
+"request_location_permission_description_label" = "We want to access your location only to provide a better experience by";
+"request_camera_permission_allow_button" = "Allow";
+"request_notifications_permission_allow_button" = "Enable";
+"request_location_permission_allow_button" = "Enable";
+"request_permission_cancel_button" = "Cancel";
+
+// MARK: - Home
+"search_bar_text_placeholder" = "Search";
