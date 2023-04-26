@@ -11,12 +11,14 @@ import Foundation
 class HomeViewModel {
     struct Input {
         let viewDidLoadPublisher: AnyPublisher<Void, Never>
+        let pullToRefreshPublisher: AnyPublisher<Void, Never>
         let settingsButtonTappedPublisher: AnyPublisher<Void, Never>
         let searchTextPublisher: AnyPublisher<String?, Never>
     }
 
     struct Output {
         let viewDidLoadPublisher: AnyPublisher<Void, Never>
+        let pullToRefreshPublisher: AnyPublisher<Void, Never>
         let searchTextPublisher: AnyPublisher<Void, Never>
         let setDataSourcePublisher: AnyPublisher<[Post], Never>
         let showPermissionCarrouselPublisher: AnyPublisher<Void, Never>
@@ -32,6 +34,7 @@ class HomeViewModel {
         self.apiClient = apiClient
     }
 
+    // MARK: - Bindings
     func transform(input: Input) -> Output {
         let viewDidLoadPublisher: AnyPublisher<Void, Never> = input.viewDidLoadPublisher.handleEvents(receiveOutput: { [weak self] _ in
             self?.fetchPosts()
@@ -56,18 +59,28 @@ class HomeViewModel {
                 return Just(posts).eraseToAnyPublisher()
                 }.eraseToAnyPublisher()
 
-        let settingsButtonTapped: AnyPublisher<Void, Never> = input.settingsButtonTappedPublisher.handleEvents(receiveOutput: { _ in
+        let settingsButtonTappedPublisher: AnyPublisher<Void, Never> = input.settingsButtonTappedPublisher.handleEvents(receiveOutput: { _ in
             
         }).flatMap {
             return Just(()).eraseToAnyPublisher()
         }.eraseToAnyPublisher()
 
+        let pullToRefreshPublisher: AnyPublisher<Void, Never> = input.pullToRefreshPublisher
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.fetchPosts()
+            })
+            .flatMap {
+                return Just(()).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
+
         return .init(viewDidLoadPublisher: viewDidLoadPublisher,
+                     pullToRefreshPublisher: pullToRefreshPublisher,
                      searchTextPublisher: searchTextPublisher,
                      setDataSourcePublisher: setDataSourcePublisher,
-                     showPermissionCarrouselPublisher: settingsButtonTapped)
+                     showPermissionCarrouselPublisher: settingsButtonTappedPublisher)
     }
 
+    // MARK: - API Calls
     private func fetchPosts() {
         apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams(),
                                             path: RedditRequest.new.path))
@@ -78,7 +91,6 @@ class HomeViewModel {
                     .map { Post(from: $0.postData) }
             }.store(in: &cancellables)
     }
-
     private func fetchSearchedPosts(searchText: String) {
         apiClient.dispatch(APIRouter.GetSearchedPosts(
             queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText),

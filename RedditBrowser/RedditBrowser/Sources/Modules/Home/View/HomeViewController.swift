@@ -35,10 +35,16 @@ class HomeViewController: UIViewController {
         return view
     }()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let view = UIRefreshControl()
+        return view
+    }()
+
     private var viewModel: HomeViewModel
     @Published private var posts: [Post] = []
 
     private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
+    private let pullToRefreshSubject = PassthroughSubject<Void,Never>()
     private let settingsButtonTappedSubject = PassthroughSubject<Void, Never>()
     private let searchTextSubject = PassthroughSubject<String?, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -89,6 +95,7 @@ class HomeViewController: UIViewController {
 
         let input = HomeViewModel.Input(
             viewDidLoadPublisher: viewDidLoadSubject.eraseToAnyPublisher(),
+            pullToRefreshPublisher: pullToRefreshSubject.eraseToAnyPublisher(),
             settingsButtonTappedPublisher: settingsButtonTappedSubject.eraseToAnyPublisher(),
             searchTextPublisher: searchTextSubject.eraseToAnyPublisher())
         let output = viewModel.transform(input: input)
@@ -107,6 +114,12 @@ class HomeViewController: UIViewController {
                 self?.goToPermissionsCarrouselViewController()
             }
             .store(in: &cancellables)
+
+        output.pullToRefreshPublisher
+            .sink { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Setup
@@ -115,6 +128,7 @@ class HomeViewController: UIViewController {
         setupSettingsButtonAction()
         setupSearchController()
         setupPostsTableView()
+        setupRefreshControlAction()
     }
 
     private func setupSettingsButton() {
@@ -153,6 +167,7 @@ class HomeViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableView.register(PostCell.self, forCellReuseIdentifier: PostCell.identifier)
+        tableView.refreshControl = refreshControl
     }
 
     // MARK: - Actions
@@ -168,6 +183,15 @@ class HomeViewController: UIViewController {
     private func goToPermissionsCarrouselViewController() {
         let permissionsCarrouselVC = PermissionsCarrouselViewController()
         present(permissionsCarrouselVC, animated: false)
+    }
+
+    private func setupRefreshControlAction() {
+        refreshControl.addTarget(self, action: #selector(pullToRefreshTriggered), for: .valueChanged)
+    }
+
+    @objc
+    private func pullToRefreshTriggered() {
+        pullToRefreshSubject.send()
     }
 }
 
