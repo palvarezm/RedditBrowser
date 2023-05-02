@@ -28,7 +28,7 @@ class HomeViewModel {
 
     private var apiClient: APIClient
     private var lastSearched: String = ""
-    private var after = ""
+    private var after: String?
     @Published private var posts: [Post] = []
     @Published private var searchText: String?
     private var cancellables: Set<AnyCancellable> = []
@@ -81,7 +81,7 @@ class HomeViewModel {
 
         let scrolledToBottomPublisher: AnyPublisher<Void, Never> = input.scrolledToBottomPublisher
             .handleEvents(receiveOutput: { [weak self] in
-                self?.fetchPosts(after: self?.after ?? "")
+                self?.fetchPosts(after: self?.after)
             })
             .flatMap {
                 return Just(()).eraseToAnyPublisher()
@@ -96,8 +96,8 @@ class HomeViewModel {
     }
 
     // MARK: - API Calls
-    private func fetchPosts(after: String = "") {
-        apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams(page: after),
+    private func fetchPosts(after: String? = nil) {
+        apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams(after: after),
                                             path: RedditRequest.new.path))
             .sink { _ in }
             receiveValue: { [weak self] response in
@@ -109,9 +109,10 @@ class HomeViewModel {
             }.store(in: &cancellables)
     }
 
-    private func fetchSearchedPosts(searchText: String, after: String = "") {
+    private func fetchSearchedPosts(searchText: String, after: String? = nil) {
         apiClient.dispatch(APIRouter.GetSearchedPosts(
-            queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText),
+            queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText,
+                                                              after: after),
             path: RedditRequest.search.path))
             .sink { _ in }
             receiveValue: { [weak self] response in
