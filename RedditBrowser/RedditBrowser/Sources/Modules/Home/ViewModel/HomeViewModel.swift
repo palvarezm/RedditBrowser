@@ -50,6 +50,7 @@ class HomeViewModel {
 
         let searchTextPublisher: AnyPublisher<Void, Never> = input.searchTextPublisher
             .handleEvents(receiveOutput: { [weak self] searchText in
+                self?.posts = []
                 self?.searchText = searchText
             }).flatMap { _ in
                 return Just(()).eraseToAnyPublisher()

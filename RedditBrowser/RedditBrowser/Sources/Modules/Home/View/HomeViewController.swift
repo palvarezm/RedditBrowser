@@ -41,6 +41,7 @@ class HomeViewController: UIViewController {
         return view
     }()
 
+    private var searchTimer = Timer()
     private var viewModel: HomeViewModel
     @Published private var posts: [Post] = []
 
@@ -61,6 +62,7 @@ class HomeViewController: UIViewController {
         static let searchControllerHorizontalMargin = 16.0
         static let postsTableViewHorizontalMargin = 16.0
         static let postCellHeight = 400.0
+        static let searchTimerInterval = 1.0
     }
 
     // MARK: - Initializers
@@ -198,12 +200,21 @@ class HomeViewController: UIViewController {
     private func pullToRefreshTriggered() {
         pullToRefreshSubject.send()
     }
+
+    @objc
+    private func searchBarChanged() {
+        searchTextSubject.send(searchBar.text)
+    }
 }
 
 // MARK: - UISearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchTextSubject.send(searchText)
+        searchTimer.invalidate()
+        searchTimer = Timer.scheduledTimer(timeInterval: Constants.searchTimerInterval,
+                                           target: self,
+                                           selector: #selector(searchBarChanged),
+                                           userInfo: searchText, repeats: false)
     }
 }
 
