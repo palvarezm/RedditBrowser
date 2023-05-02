@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
         let view = UIButton()
         view.configuration = .plain()
         view.configuration?.image = UIImage(systemName: "gearshape")
+        view.tintColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -105,9 +106,7 @@ class HomeViewController: UIViewController {
 
         output.setDataSourcePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] posts in
-                self?.posts = posts
-            }
+            .assign(to: \.posts, on: self)
             .store(in: &cancellables)
 
         output.showPermissionCarrouselPublisher
