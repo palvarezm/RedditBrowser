@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import SDWebImage
 
 class PostCell: UITableViewCell {
     // MARK: - Properties
@@ -225,7 +226,8 @@ class PostCell: UITableViewCell {
         self.commentsQuantityLabel.text = post.commentsQuantity
         guard let imageURL = URL(string: post.imageURL) else { return }
 
-        getImage(for: imageURL)
+//        getImage(for: imageURL)
+        postImageView.sd_setImage(with: imageURL)
     }
 
     func getImage(for url: URL) {
