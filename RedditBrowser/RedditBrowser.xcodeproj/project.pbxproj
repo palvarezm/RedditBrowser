@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		83260C5129F9015D000DCBDB /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 83260C5029F9015D000DCBDB /* SDWebImage */; };
 		8395306329F7A2B800F604CF /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395306229F7A2B800F604CF /* UIView+Extension.swift */; };
 		8395306929F7A7E100F604CF /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395306829F7A7E100F604CF /* HomeViewController.swift */; };
 		8395306C29F7A8CC00F604CF /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8395306B29F7A8CC00F604CF /* APIConstants.swift */; };
@@ -90,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83260C5129F9015D000DCBDB /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +332,9 @@
 			dependencies = (
 			);
 			name = RedditBrowser;
+			packageProductDependencies = (
+				83260C5029F9015D000DCBDB /* SDWebImage */,
+			);
 			productName = RedditBrowser;
 			productReference = 83A9EE9D29F611C400C99984 /* RedditBrowser.app */;
 			productType = "com.apple.product-type.application";
@@ -402,6 +407,9 @@
 				Base,
 			);
 			mainGroup = 83A9EE9429F611C400C99984;
+			packageReferences = (
+				83260C4F29F9015D000DCBDB /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = 83A9EE9E29F611C400C99984 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -798,6 +806,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		83260C4F29F9015D000DCBDB /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		83260C5029F9015D000DCBDB /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83260C4F29F9015D000DCBDB /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83A9EE9529F611C400C99984 /* Project object */;
 }
