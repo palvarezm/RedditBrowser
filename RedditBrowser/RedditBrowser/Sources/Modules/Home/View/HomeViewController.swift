@@ -33,6 +33,8 @@ class HomeViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.keyboardDismissMode = .onDrag
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
