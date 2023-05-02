@@ -14,6 +14,7 @@ class HomeViewModel {
         let pullToRefreshPublisher: AnyPublisher<Void, Never>
         let settingsButtonTappedPublisher: AnyPublisher<Void, Never>
         let searchTextPublisher: AnyPublisher<String?, Never>
+        let scrolledToBottomPublisher: AnyPublisher<Void, Never>
     }
 
     struct Output {
@@ -22,10 +23,12 @@ class HomeViewModel {
         let searchTextPublisher: AnyPublisher<Void, Never>
         let setDataSourcePublisher: AnyPublisher<[Post], Never>
         let showPermissionCarrouselPublisher: AnyPublisher<Void, Never>
+        let scrolledToBottomPublisher: AnyPublisher<Void, Never>
     }
 
     private var apiClient: APIClient
     private var lastSearched: String = ""
+    private var after = ""
     @Published private var posts: [Post] = []
     @Published private var searchText: String?
     private var cancellables: Set<AnyCancellable> = []
@@ -36,17 +39,20 @@ class HomeViewModel {
 
     // MARK: - Bindings
     func transform(input: Input) -> Output {
-        let viewDidLoadPublisher: AnyPublisher<Void, Never> = input.viewDidLoadPublisher.handleEvents(receiveOutput: { [weak self] _ in
-            self?.fetchPosts()
-        }).flatMap {
-            return Just(()).eraseToAnyPublisher()
-        }.eraseToAnyPublisher()
+        let viewDidLoadPublisher: AnyPublisher<Void, Never> = input.viewDidLoadPublisher
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.posts = []
+                self?.fetchPosts()
+            }).flatMap {
+                return Just(()).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
 
-        let searchTextPublisher: AnyPublisher<Void, Never> = input.searchTextPublisher.handleEvents(receiveOutput: { [weak self] searchText in
-            self?.searchText = searchText
-        }).flatMap { _ in
-            return Just(()).eraseToAnyPublisher()
-        }.eraseToAnyPublisher()
+        let searchTextPublisher: AnyPublisher<Void, Never> = input.searchTextPublisher
+            .handleEvents(receiveOutput: { [weak self] searchText in
+                self?.searchText = searchText
+            }).flatMap { _ in
+                return Just(()).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
 
         let setDataSourcePublisher: AnyPublisher<[Post], Never> = Publishers.CombineLatest(
             $posts.compactMap { $0 },
@@ -59,15 +65,23 @@ class HomeViewModel {
                 return Just(posts).eraseToAnyPublisher()
                 }.eraseToAnyPublisher()
 
-        let settingsButtonTappedPublisher: AnyPublisher<Void, Never> = input.settingsButtonTappedPublisher.handleEvents(receiveOutput: { _ in
-            
-        }).flatMap {
-            return Just(()).eraseToAnyPublisher()
-        }.eraseToAnyPublisher()
+        let settingsButtonTappedPublisher: AnyPublisher<Void, Never> = input.settingsButtonTappedPublisher
+            .flatMap {
+                return Just(()).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
 
         let pullToRefreshPublisher: AnyPublisher<Void, Never> = input.pullToRefreshPublisher
             .handleEvents(receiveOutput: { [weak self] _ in
+                self?.posts = []
                 self?.fetchPosts()
+            })
+            .flatMap {
+                return Just(()).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
+
+        let scrolledToBottomPublisher: AnyPublisher<Void, Never> = input.scrolledToBottomPublisher
+            .handleEvents(receiveOutput: { [weak self] in
+                self?.fetchPosts(after: self?.after ?? "")
             })
             .flatMap {
                 return Just(()).eraseToAnyPublisher()
@@ -77,26 +91,31 @@ class HomeViewModel {
                      pullToRefreshPublisher: pullToRefreshPublisher,
                      searchTextPublisher: searchTextPublisher,
                      setDataSourcePublisher: setDataSourcePublisher,
-                     showPermissionCarrouselPublisher: settingsButtonTappedPublisher)
+                     showPermissionCarrouselPublisher: settingsButtonTappedPublisher,
+                     scrolledToBottomPublisher: scrolledToBottomPublisher)
     }
 
     // MARK: - API Calls
-    private func fetchPosts() {
-        apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams(),
+    private func fetchPosts(after: String = "") {
+        apiClient.dispatch(APIRouter.GetNew(queryParams: APIParameters.GetNewParams(page: after),
                                             path: RedditRequest.new.path))
             .sink { _ in }
             receiveValue: { [weak self] response in
-                self?.posts = response.data.posts
+                self?.after = response.data.after
+                let fetchedPosts = response.data.posts
                     .filter { $0.postData.postHint == PostHint.image.rawValue }
                     .map { Post(from: $0.postData) }
+                self?.posts.append(contentsOf: fetchedPosts)
             }.store(in: &cancellables)
     }
-    private func fetchSearchedPosts(searchText: String) {
+
+    private func fetchSearchedPosts(searchText: String, after: String = "") {
         apiClient.dispatch(APIRouter.GetSearchedPosts(
             queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText),
             path: RedditRequest.search.path))
             .sink { _ in }
             receiveValue: { [weak self] response in
+                self?.after = response.data.after
                 self?.posts = response.data.posts
                     .filter { $0.postData.postHint == PostHint.image.rawValue }
                     .map { Post(from: $0.postData) }

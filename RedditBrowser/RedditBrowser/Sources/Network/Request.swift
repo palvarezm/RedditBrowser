@@ -26,7 +26,9 @@ extension Request {
     func addQueryParams(queryParams: [String: Any]?) -> [URLQueryItem]? {
         guard let queryParams = queryParams else { return nil }
 
-        return queryParams.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+        return queryParams
+            .map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+            .filter { $0.value != "" }
     }
 
     func asURLRequest(baseURL: String) -> URLRequest? {
