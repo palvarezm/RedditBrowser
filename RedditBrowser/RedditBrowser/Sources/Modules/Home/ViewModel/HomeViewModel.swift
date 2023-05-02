@@ -42,6 +42,7 @@ class HomeViewModel {
         let viewDidLoadPublisher: AnyPublisher<Void, Never> = input.viewDidLoadPublisher
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.posts = []
+                self?.lastSearched = ""
                 self?.fetchPosts()
             }).flatMap {
                 return Just(()).eraseToAnyPublisher()
@@ -73,6 +74,7 @@ class HomeViewModel {
         let pullToRefreshPublisher: AnyPublisher<Void, Never> = input.pullToRefreshPublisher
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.posts = []
+                self?.lastSearched = ""
                 self?.fetchPosts()
             })
             .flatMap {
@@ -81,7 +83,12 @@ class HomeViewModel {
 
         let scrolledToBottomPublisher: AnyPublisher<Void, Never> = input.scrolledToBottomPublisher
             .handleEvents(receiveOutput: { [weak self] in
-                self?.fetchPosts(after: self?.after)
+                guard let self = self else { return }
+                if self.lastSearched.isEmpty {
+                    self.fetchPosts(after: self.after)
+                } else {
+                    self.fetchSearchedPosts(searchText: self.lastSearched, after: self.after)
+                }
             })
             .flatMap {
                 return Just(()).eraseToAnyPublisher()
@@ -111,15 +118,15 @@ class HomeViewModel {
 
     private func fetchSearchedPosts(searchText: String, after: String? = nil) {
         apiClient.dispatch(APIRouter.GetSearchedPosts(
-            queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText,
-                                                              after: after),
+            queryParams: APIParameters.GetSearchedPostsParams(searchedText: searchText, after: after),
             path: RedditRequest.search.path))
             .sink { _ in }
             receiveValue: { [weak self] response in
                 self?.after = response.data.after
-                self?.posts = response.data.posts
+                let fetchedPosts = response.data.posts
                     .filter { $0.postData.postHint == PostHint.image.rawValue }
                     .map { Post(from: $0.postData) }
+                self?.posts.append(contentsOf: fetchedPosts)
             }.store(in: &cancellables)
     }
 }

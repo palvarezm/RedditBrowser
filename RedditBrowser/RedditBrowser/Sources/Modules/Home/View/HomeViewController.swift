@@ -120,6 +120,8 @@ class HomeViewController: UIViewController {
 
         output.pullToRefreshPublisher
             .sink { [weak self] _ in
+                self?.searchBar.text = nil
+                self?.searchBar.resignFirstResponder()
                 self?.refreshControl.endRefreshing()
             }
             .store(in: &cancellables)
