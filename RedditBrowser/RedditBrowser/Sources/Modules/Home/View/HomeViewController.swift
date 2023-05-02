@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
         let view = UIButton()
         view.configuration = .plain()
         view.configuration?.image = UIImage(systemName: "gearshape")
+        view.tintColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -31,6 +32,9 @@ class HomeViewController: UIViewController {
         let view = UITableView()
         view.delegate = self
         view.dataSource = self
+        view.keyboardDismissMode = .onDrag
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -40,6 +44,7 @@ class HomeViewController: UIViewController {
         return view
     }()
 
+    private var searchTimer = Timer()
     private var viewModel: HomeViewModel
     @Published private var posts: [Post] = []
 
@@ -47,6 +52,7 @@ class HomeViewController: UIViewController {
     private let pullToRefreshSubject = PassthroughSubject<Void,Never>()
     private let settingsButtonTappedSubject = PassthroughSubject<Void, Never>()
     private let searchTextSubject = PassthroughSubject<String?, Never>()
+    private let scrolledToBottomSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Constants
@@ -59,6 +65,7 @@ class HomeViewController: UIViewController {
         static let searchControllerHorizontalMargin = 16.0
         static let postsTableViewHorizontalMargin = 16.0
         static let postCellHeight = 400.0
+        static let searchTimerInterval = 1.0
     }
 
     // MARK: - Initializers
@@ -98,16 +105,16 @@ class HomeViewController: UIViewController {
             viewDidLoadPublisher: viewDidLoadSubject.eraseToAnyPublisher(),
             pullToRefreshPublisher: pullToRefreshSubject.eraseToAnyPublisher(),
             settingsButtonTappedPublisher: settingsButtonTappedSubject.eraseToAnyPublisher(),
-            searchTextPublisher: searchTextSubject.eraseToAnyPublisher())
+            searchTextPublisher: searchTextSubject.eraseToAnyPublisher(),
+            scrolledToBottomPublisher: scrolledToBottomSubject.eraseToAnyPublisher())
         let output = viewModel.transform(input: input)
 
-        [output.viewDidLoadPublisher, output.searchTextPublisher].forEach { $0.sink { _ in }.store(in: &cancellables) }
+        [output.viewDidLoadPublisher, output.searchTextPublisher, output.scrolledToBottomPublisher]
+            .forEach { $0.sink { _ in }.store(in: &cancellables) }
 
         output.setDataSourcePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] posts in
-                self?.posts = posts
-            }
+            .assign(to: \.posts, on: self)
             .store(in: &cancellables)
 
         output.showPermissionCarrouselPublisher
@@ -118,6 +125,8 @@ class HomeViewController: UIViewController {
 
         output.pullToRefreshPublisher
             .sink { [weak self] _ in
+                self?.searchBar.text = nil
+                self?.searchBar.resignFirstResponder()
                 self?.refreshControl.endRefreshing()
             }
             .store(in: &cancellables)
@@ -183,7 +192,7 @@ class HomeViewController: UIViewController {
 
     private func goToPermissionsCarrouselViewController() {
         let permissionsCarrouselVC = PermissionsCarrouselViewController()
-        present(permissionsCarrouselVC, animated: false)
+        present(permissionsCarrouselVC, animated: true)
     }
 
     private func setupRefreshControlAction() {
@@ -194,12 +203,21 @@ class HomeViewController: UIViewController {
     private func pullToRefreshTriggered() {
         pullToRefreshSubject.send()
     }
+
+    @objc
+    private func searchBarChanged() {
+        searchTextSubject.send(searchBar.text)
+    }
 }
 
 // MARK: - UISearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchTextSubject.send(searchText)
+        searchTimer.invalidate()
+        searchTimer = Timer.scheduledTimer(timeInterval: Constants.searchTimerInterval,
+                                           target: self,
+                                           selector: #selector(searchBarChanged),
+                                           userInfo: searchText, repeats: false)
     }
 }
 
@@ -220,5 +238,11 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         Constants.postCellHeight
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == posts.count - 1 {
+            scrolledToBottomSubject.send()
+        }
     }
 }
