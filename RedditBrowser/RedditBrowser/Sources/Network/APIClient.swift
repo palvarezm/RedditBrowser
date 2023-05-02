@@ -24,13 +24,7 @@ enum NetworkRequestError: LocalizedError, Equatable {
 }
 
 // MARK: - NetworkDispatcher
-protocol NetworkDispatcher {
-    var urlSession: URLSession! { get }
-
-    func dispatch<ReturnType: Codable>(request: URLRequest) -> AnyPublisher<ReturnType, NetworkRequestError>
-}
-
-struct NetworkDispatcherImpl: NetworkDispatcher {
+struct NetworkDispatcher {
     let urlSession: URLSession!
 
     public init(urlSession: URLSession = .shared) {
@@ -84,13 +78,12 @@ struct NetworkDispatcherImpl: NetworkDispatcher {
 }
 
 // MARK: - APIClient
-protocol APIClient {
-    var networkDispatcher: NetworkDispatcher { get }
-    func dispatch<R:Request>(_ request: R) -> AnyPublisher<R.ReturnType, NetworkRequestError>
-}
+class APIClient {
+    var networkDispatcher: NetworkDispatcher!
 
-class APIClientImpl: APIClient {
-    var networkDispatcher: NetworkDispatcher = NetworkDispatcherImpl()
+    public init(networkDispatcher: NetworkDispatcher = NetworkDispatcher()) {
+        self.networkDispatcher = networkDispatcher
+    }
 
     func dispatch<R>(_ request: R) -> AnyPublisher<R.ReturnType, NetworkRequestError> where R : Request {
         guard let urlRequest = request.asURLRequest(baseURL: APIConstants.baseURL) else {

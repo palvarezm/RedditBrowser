@@ -33,7 +33,7 @@ class HomeViewModel {
     @Published private var searchText: String?
     private var cancellables: Set<AnyCancellable> = []
 
-    init(apiClient: APIClient = APIClientImpl()) {
+    init(apiClient: APIClient = APIClient()) {
         self.apiClient = apiClient
     }
 
